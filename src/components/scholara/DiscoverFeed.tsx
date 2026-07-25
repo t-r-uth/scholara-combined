@@ -27,7 +27,8 @@ interface DiscoverFeedProps {
   hasFilters: boolean
   page: number
   totalPages: number
-  filterUrl: (overrides: Record<string, string | undefined>) => string
+  prevPageUrl: string | null
+  nextPageUrl: string | null
 }
 
 export default function DiscoverFeed({
@@ -36,7 +37,8 @@ export default function DiscoverFeed({
   hasFilters,
   page,
   totalPages,
-  filterUrl,
+  prevPageUrl,
+  nextPageUrl,
 }: DiscoverFeedProps) {
   const [driveConnected, setDriveConnected] = useState(false)
 
@@ -203,9 +205,9 @@ export default function DiscoverFeed({
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-4 pt-4">
               <Link
-                href={filterUrl({ page: page > 1 ? String(page - 1) : undefined })}
+                href={prevPageUrl ?? '#'}
                 className={`px-4 py-2 text-xs font-bold border border-[#CBD5E1] ${
-                  page <= 1 ? 'opacity-40 pointer-events-none' : 'hover:bg-[#F8FAFC]'
+                  !prevPageUrl ? 'opacity-40 pointer-events-none' : 'hover:bg-[#F8FAFC]'
                 }`}
               >
                 ← Previous
@@ -214,9 +216,9 @@ export default function DiscoverFeed({
                 {page} / {totalPages}
               </span>
               <Link
-                href={filterUrl({ page: page < totalPages ? String(page + 1) : undefined })}
+                href={nextPageUrl ?? '#'}
                 className={`px-4 py-2 text-xs font-bold border border-[#CBD5E1] ${
-                  page >= totalPages ? 'opacity-40 pointer-events-none' : 'hover:bg-[#F8FAFC]'
+                  !nextPageUrl ? 'opacity-40 pointer-events-none' : 'hover:bg-[#F8FAFC]'
                 }`}
               >
                 Next →

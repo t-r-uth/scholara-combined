@@ -164,9 +164,10 @@ export default async function DiscoverPage({
     }
   })
 
-  function buildFilterUrl(overrides: Record<string, string | undefined>) {
-    return filterUrl(activeFilters, overrides)
-  }
+  const prevPageUrl =
+    page > 1 ? filterUrl(activeFilters, { page: String(page - 1) }) : null
+  const nextPageUrl =
+    page < totalPages ? filterUrl(activeFilters, { page: String(page + 1) }) : null
 
   return (
     <>
@@ -188,7 +189,8 @@ export default async function DiscoverPage({
         hasFilters={hasFilters}
         page={page}
         totalPages={totalPages}
-        filterUrl={buildFilterUrl}
+        prevPageUrl={prevPageUrl}
+        nextPageUrl={nextPageUrl}
       />
     </>
   )
