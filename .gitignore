@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Environment (never commit secrets)
+.env
+.env.local
+.env*.local
+
+# Keep template env file in git
+!.env.example
+
+# Build / cache
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+*.log
+
+# Vercel
+.vercel
+
+# Claude / local tooling
+.claude/

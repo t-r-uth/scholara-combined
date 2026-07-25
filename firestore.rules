@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return request.auth.uid == userId; }
+
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isOwner(userId);
+    }
+
+    match /papers/{paperId} {
+      allow read: if resource.data.status == 'published' || isOwner(resource.data.owner_id);
+      allow create: if isSignedIn() && request.resource.data.owner_id == request.auth.uid;
+      allow update, delete: if isOwner(resource.data.owner_id);
+    }
+
+    match /stages/{stageId} {
+      allow read: if true;
+      allow write: if isSignedIn() && exists(/databases/$(database)/documents/papers/$(resource.data.paper_id))
+        && get(/databases/$(database)/documents/papers/$(resource.data.paper_id)).data.owner_id == request.auth.uid;
+    }
+
+    match /applications/{appId} {
+      allow read: if isOwner(resource.data.applicant_id)
+        || (isSignedIn() && exists(/databases/$(database)/documents/papers/$(resource.data.paper_id))
+          && get(/databases/$(database)/documents/papers/$(resource.data.paper_id)).data.owner_id == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.applicant_id == request.auth.uid;
+    }
+
+    match /connections/{connId} {
+      allow read: if isSignedIn(); // further restricted in server action
+    }
+
+    match /contributions/{contribId} {
+      allow read: if isOwner(resource.data.contributor_id) || isSignedIn();
+    }
+
+    match /notifications/{notifId} {
+      allow read, update: if isOwner(resource.data.user_id);
+    }
+
+    match /reports/{reportId} {
+      allow create: if isSignedIn() && request.resource.data.reporter_id == request.auth.uid;
+      allow read: if isOwner(resource.data.reporter_id);
+    }
+  }
+}

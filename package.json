@@ -1,0 +1,32 @@
+{
+  "name": "scholara-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:clean": "rm -rf .next && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "firebase": "^12.15.0",
+    "firebase-admin": "^14.1.0",
+    "next": "^14.2.29",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "resend": "^6.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "jose": "4.15.9"
+  }
+}
